@@ -4,6 +4,7 @@ const port = 3000;
 
 app.use(express.json());
 //endpoints:
+//CRUD 
 //put, delete, post, get
 
 students = [
@@ -41,6 +42,30 @@ app.post('/students', (req, res) => {
     const newStudent = req.body;
     students.push(newStudent)
     console.log(newStudent);
+});
+
+app.delete('/students/:id', (req, res) => {
+    const id = req.params.id;
+    const index = students.findIndex(student => student.id === id);
+    if (index !== -1) {
+        students.splice(index, 1);
+        res.send(`Student with ID ${id} has been deleted`);
+    } else {
+        res.status(404).send('Student not found');
+    }
+});
+
+
+app.put('/students/:id', (req, res) => {
+    const id = req.params.id;
+    const updatedStudent = req.body;
+    const index = students.findIndex(student => student.id === id);
+    if (index !== -1) {
+        students[index] = { ...students[index], ...updatedStudent };
+        res.send(`Student with ID ${id} has been updated`);
+    } else {
+        res.status(404).send('Student not found');
+    }
 });
 
 
